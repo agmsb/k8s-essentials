@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: can-crash
+  labels:
+    app: app-debug
+data:
+  CAN_CRASH: "True"

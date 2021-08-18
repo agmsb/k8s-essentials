@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-debug
+spec:
+  selector:
+    matchLabels:
+      app: app-debug
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: app-debug
+    spec:
+      containers:
+      - name: app-debug
+        image: gcr.io/agmsb-k8s/app-debug
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: CAN_CRASH
+          valueFrom:
+            configMapKeyRef:
+              name: can-crash
+              key: CAN_CRASH
+        readinessProbe:
+          initialDelaySeconds: 1
+          periodSeconds: 2
+          timeoutSeconds: 1
+          successThreshold: 1
+          failureThreshold: 1
+          httpGet:
+            scheme: HTTP
+            path: /healthz
+            port: 5000
